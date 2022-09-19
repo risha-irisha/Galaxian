@@ -2,30 +2,29 @@
 #include "World.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "ResourceManager.h"
 
 FProjectile::FProjectile(FWorld& World) : FMovableObject(World)
 {
-	Texture.loadFromFile("./Content/Textures/Main_Texture.png");
+	Texture = FResourceManager::Get().FindOrLoadTexture("./Content/Textures/Main_Texture.png");
+
 	TextureSize.x = 18;
 	TextureSize.y = 46;
 
 	Rect.width = 18;
 	Rect.height = 46;
 
-	//SetSpriteRect(855, 231);
+	SetSpriteRect(855, 231);
 
-	currentFrame = 0.f;
-	numberFrame = 4;
-	SpeedAnimation = 0.005f;
-	SpriteTexturePositionX = 855;
-	SpriteTexturePositionY = 231;
-	SpriteOffset = 50;
+	//numberFrame = 4;
+	//SpeedAnimation = 0.005f;
+	//SpriteTexturePositionX = 855;
+	//SpriteTexturePositionY = 231;
+	//SpriteOffset = 4;
+	//bIsAnimationDirectionX = false;
 
 	MoveSpeed = 10.f;
-
-	bIsBorders = false;
-
-	bIsDirectionX = false;
+	bEnableBordersCollision = false;	
 }
 
 void FProjectile::Tick(float DeltaTime)
@@ -52,7 +51,8 @@ float FProjectile::GetDamage() const
 void FProjectile::ProcessProjectileCollision()
 {
 	bool bIsProgectileIntersection = false;
-	bool bIsHittingPlayer = false; // попадание в игрока пулей
+
+	std::vector<FCharacter*> characterToRemove;
 
 	for (size_t i = 0; i < World.GetObjects().size(); i++)
 	{
@@ -80,68 +80,36 @@ void FProjectile::ProcessProjectileCollision()
 				//проверяем что команда пули и корабля не совпадает
 				if (Team != character->GetTeam())
 				{
+					bIsProgectileIntersection = true;
+
 					//здесь нужно сделать еще 1 dynamic_cast для того чтобы проверить что character является Enemy и  если является то мы просто удаляем его из мира
 					FEnemy* enemy = dynamic_cast<FEnemy*>(character);
 
 					if (enemy != nullptr)
 					{
-						World.GetObjects().erase(World.GetObjects().begin() + i);
-						bIsProgectileIntersection = true;
+						characterToRemove.push_back(character);
 					}
-					//Если character это Player то пока ничего не делаем
-					else
+					else //Если character это Player то пока ничего не делаем
 					{
-						FPlayer* player = dynamic_cast<FPlayer*>(character);
-						if (player != nullptr)
+						if (FPlayer* player = dynamic_cast<FPlayer*>(character))
 						{
-							bIsHittingPlayer = true;
-							player->GetHP() -= Damage;
-							if (player->GetHP() <= 0)
-							{
-								player->Dead(); 
-								//World.GetObjects().erase(World.GetObjects().begin() + i);
-							}
+							player->SetHP(player->GetHP() - Damage);
 						}
 					}
 				}
 			}
-			//приведение типов произошло не успешно, else по сути нам тут не нужен
-			else
-			{
-
-			}
 		}
 	}
 
-	if (bIsProgectileIntersection || bIsHittingPlayer || Rect.top + Rect.height < 0 || Rect.top> World.GetWindowSize().y)
+	for (size_t i = 0; i < characterToRemove.size(); i++)
 	{
-		for (size_t i = 0; i < World.GetObjects().size(); i++)
-		{
-			if (World.GetObjects()[i].get() == this)
-			{
-				World.GetObjects().erase(World.GetObjects().begin() + i);
-				return;
-			}
-		}
+		World.RemoveObject(*characterToRemove[i]);
 	}
 
-	//if (bIsHittingPlayer)
-	//{
-	//	//bIsHittingPlayer = false;
-	//	HP--;
-	//	if (HP >= 2)
-	//	{
-	//		std::cout << HP << " lives left\n";
-	//	}
-	//	else if (HP == 0)
-	//	{
-	//		std::cout << "Dead";
-	//	}
-	//	else
-	//	{
-	//		std::cout << HP << " life left\n";
-	//	}
-	//}
+	if (bIsProgectileIntersection || Rect.top + Rect.height < 0 || Rect.top> World.GetWindowSize().y)
+	{
+		World.RemoveObject(*this);
+	}
 }
 
 bool FProjectile::ObjectIntersection(const sf::FloatRect& transform1, const sf::FloatRect& transform2)
@@ -154,12 +122,5 @@ bool FProjectile::ObjectIntersection(const sf::FloatRect& transform1, const sf::
 	float width = right - left;
 	float height = bottom - top;
 
-	if (height > 10.f && width > 10.f)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return height > 0.f && width > 0.f;
 }

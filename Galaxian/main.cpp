@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Window/Event.hpp"
 
@@ -5,7 +7,7 @@
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(750, 600), "Galaxian");
+	sf::RenderWindow window(sf::VideoMode(1280, 720), "Galaxian");
 
 	FWorld world(window);
 
@@ -26,7 +28,6 @@ int main()
 				}
 			}
 			world.GetInputControler().HandleEvent(windowEvent);
-			std::cout << world.GetPlayer().GetHP() << " ";
 		}
 
 		if (world.GetEndGame())

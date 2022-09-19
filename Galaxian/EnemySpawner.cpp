@@ -9,7 +9,6 @@ FEnemySpawner::FEnemySpawner(FWorld& World) : World(World)
 
 void FEnemySpawner::SpawnWave(const FLevel& Level)
 {
-	
 	for (size_t i = 0; i < Level.GetEnemiesDescriptions().size(); i++)
 	{
 		const FEnemyDescription& enemyDescription = Level.GetEnemiesDescriptions()[i];

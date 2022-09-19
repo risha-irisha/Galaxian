@@ -43,7 +43,12 @@ sf::Vector2f FStaticObject::GetOrigin() const
 
 void FStaticObject::SetSpriteRect(int TextureX, int TextureY)
 {
-	Sprite.setTexture(Texture);
+	if (Texture == nullptr)
+	{
+		return;
+	}
+
+	Sprite.setTexture(*Texture.get());
 	Sprite.setTextureRect(sf::IntRect(TextureX, TextureY, TextureSize.x, TextureSize.y));
 	
 	const sf::Vector2f spriteScale(Rect.width / TextureSize.x, Rect.height / TextureSize.y);

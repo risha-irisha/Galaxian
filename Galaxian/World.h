@@ -5,7 +5,6 @@
 #include "Level.h"
 #include "EnemySpawner.h"
 #include "EnemyController.h"
-#include "Player.h"
 
 class FPlayer;
 class FStaticObject;
@@ -24,6 +23,7 @@ public:
 	FPlayer& GetPlayer();
 	FInputControler& GetInputControler();
 
+	void RemoveObject(const FStaticObject& ObjectToRemove);
 	std::vector<std::shared_ptr<FStaticObject>>& GetObjects();
 
 	float GetWorldTime();

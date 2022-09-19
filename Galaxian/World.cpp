@@ -1,6 +1,7 @@
 #include "World.h"
 #include "WhiteSpaceshipEnemy.h"
 #include "Level.h"
+#include "Player.h"
 
 FWorld::FWorld(sf::RenderWindow& InWindow) : 
 	Window(InWindow),
@@ -14,12 +15,6 @@ FWorld::FWorld(sf::RenderWindow& InWindow) :
 	Level.Load("level.txt");
 
 	enemySpawner.SpawnWave(Level);
-
-	//std::shared_ptr<FWhiteSpaceshipEnemy> WhiteSpaceshipEnemy;
-	//WhiteSpaceshipEnemy = std::make_shared<FWhiteSpaceshipEnemy>(*this);
-	//Objects.push_back(WhiteSpaceshipEnemy);
-	//WhiteSpaceshipEnemy->SetPosition(100.f, 100.f);
-
 }
 
 void FWorld::Tick(float DeltaTime)
@@ -67,6 +62,19 @@ FPlayer& FWorld::GetPlayer()
 FInputControler& FWorld::GetInputControler()
 {
 	return InputControler;
+}
+
+void FWorld::RemoveObject(const FStaticObject& ObjectToRemove)
+{
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		std::shared_ptr<FStaticObject> object = Objects[i];
+		if (object != nullptr && object.get() == &ObjectToRemove)
+		{
+			Objects.erase(Objects.begin() + i);
+			return;
+		}
+	}
 }
 
 std::vector<std::shared_ptr<FStaticObject>>& FWorld::GetObjects()

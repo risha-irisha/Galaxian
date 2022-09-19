@@ -29,7 +29,7 @@ protected:
 	sf::FloatRect Rect;
 
 	sf::Sprite Sprite;
-	sf::Texture Texture;
+	std::shared_ptr<sf::Texture> Texture;
 
 	sf::Vector2i TextureSize;
 };

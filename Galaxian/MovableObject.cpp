@@ -11,7 +11,7 @@ void FMovableObject::Move(float DeltaTime)
 	Rect.left += velocity.x;
 	Rect.top += velocity.y;
 
-	if (bIsBorders)
+	if (bEnableBordersCollision)
 	{
 		if (Rect.top < 0)
 		{
@@ -44,28 +44,52 @@ void FMovableObject::ProcessObjectCollision()
 {
 }
 
-void FMovableObject::Animation(float DeltaTime)
+FAnimationData* FMovableObject::GetCurrentAnimationData()
 {
-	currentFrame += SpeedAnimation;
-	if (currentFrame > numberFrame)
+	//Проверяем что индекс указан верно и у нас есть анимации
+	if (CurrentAnimationIndex >= 0 && CurrentAnimationIndex < Animations.size())
 	{
-		currentFrame = 0.f;
+		return &Animations[CurrentAnimationIndex];
 	}
 
-	if (bIsDirectionX)
-	{		
-		SetSpriteRect(SpriteTexturePositionX + SpriteOffset * int(currentFrame), SpriteTexturePositionY);
-	}
-	else
+	//если анимаций нет, возвращаем нулевой указатель
+	return nullptr;
+}
+
+void FMovableObject::Animation(float DeltaTime)
+{
+	FAnimationData* currentAnimationPtr = GetCurrentAnimationData();
+	if (currentAnimationPtr == nullptr || !bEnableAnimation)
 	{
-		currentFrame += SpeedAnimation;
-		if (currentFrame > numberFrame)
-		{
-			currentFrame = 1.f;
-		}
-		SetSpriteRect(SpriteTexturePositionX , SpriteTexturePositionY + SpriteOffset * int(currentFrame));
+		return;
 	}
-	
+
+	currentFrame += currentAnimationPtr->SpeedAnimation;
+	//Проверка что анимация полностью проигралась
+	if (currentFrame > currentAnimationPtr->numberFrames)
+	{
+		currentFrame = 0.f;
+
+		//Если анимация должна проиграться всего 1 раз - выключаем анимацию
+		if (currentAnimationPtr->bPlayOnlyOnce)
+		{
+			bEnableAnimation = false;
+		}
+	}
+
+	//Если мы только что остановили анимацию(т.е. она проигралась до конца), то мы больше не обновляем текстуру, т.к. currentFrame будет равен 0 и анимация замрет на 1м кадре
+	if (bEnableAnimation)
+	{
+		switch (currentAnimationPtr->AnimationDirection)
+		{
+		case ETextureAnimationDirection::Horizontal:
+			SetSpriteRect(currentAnimationPtr->SpriteTexturePositionX + (TextureSize.x + currentAnimationPtr->SpriteOffset) * int(currentFrame), currentAnimationPtr->SpriteTexturePositionY);
+			break;
+		case ETextureAnimationDirection::Vertical:
+			SetSpriteRect(currentAnimationPtr->SpriteTexturePositionX, currentAnimationPtr->SpriteTexturePositionY + (TextureSize.y + currentAnimationPtr->SpriteOffset) * int(currentFrame));
+			break;
+		}
+	}
 	//std::cout << SpriteTexturePositionX * int(currentFrame) << "\n";
 }
 

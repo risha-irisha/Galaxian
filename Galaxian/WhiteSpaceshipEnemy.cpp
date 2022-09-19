@@ -1,8 +1,10 @@
 #include "WhiteSpaceshipEnemy.h"
+#include "ResourceManager.h"
 
 FWhiteSpaceshipEnemy::FWhiteSpaceshipEnemy(FWorld& World) : FEnemy(World)
 {
-	Texture.loadFromFile("./Content/Textures/Main_Texture.png");
+	Texture = FResourceManager::Get().FindOrLoadTexture("./Content/Textures/Main_Texture.png");
+
 	TextureSize.x = 39;
 	TextureSize.y = 55;
 
@@ -14,13 +16,16 @@ FWhiteSpaceshipEnemy::FWhiteSpaceshipEnemy(FWorld& World) : FEnemy(World)
 	GunOffset.y = -Rect.height / 2;
 
 	currentFrame = 0.f;
-	numberFrame = 4;
-	SpeedAnimation = 0.01f;
-	SpriteTexturePositionX = 0;
-	SpriteTexturePositionY = 708;
-	SpriteOffset = 41;
 
-	bIsDirectionX = true;
+	SetSpriteRect(0, 708);
+	//numberFrame = 4;
+	//SpeedAnimation = 0.01f;
+	//SpriteTexturePositionX = 0;
+	//SpriteTexturePositionY = 708;
+	//SpriteOffset = 2;
+
+	//bIsAnimationDirectionX = true;
+
 
 	//bIsEnabledAutoFire = true;
 

@@ -3,6 +3,26 @@
 
 #include "StaticObject.h"
 
+enum class ETextureAnimationDirection
+{
+	Vertical,
+	Horizontal
+};
+
+struct FAnimationData
+{
+	float SpeedAnimation = 0.f;
+
+	int numberFrames = 0;
+	int SpriteTexturePositionX = 0;
+	int SpriteTexturePositionY = 0;
+	int SpriteOffset = 0;
+	ETextureAnimationDirection AnimationDirection = ETextureAnimationDirection::Horizontal;
+
+	//Проиграть только 1 раз анимацию после запуска
+	bool bPlayOnlyOnce = false;
+};
+
 class FMovableObject : public FStaticObject
 {
 public:
@@ -11,6 +31,8 @@ public:
 	void Move(float DeltaTime);
 	void Tick(float DeltaTime);
 	void ProcessObjectCollision();
+
+	FAnimationData* GetCurrentAnimationData();
 
 	void Animation(float DeltaTime);
 
@@ -23,14 +45,13 @@ protected:
 	float MoveSpeed;
 
 	float currentFrame = 0.f;
-	int numberFrame = 0;
-	float SpeedAnimation = 0.f;
-	int SpriteTexturePositionX = 0;
-	int SpriteTexturePositionY = 0;
-	int SpriteOffset = 0;
+	bool bEnableAnimation = true;
+	
+	//Текущий индекс анимации из массива Animations
+	int CurrentAnimationIndex = 0;
+	//Список всех анимаций объекта
+	std::vector<FAnimationData> Animations;
 
-	bool bIsBorders = true;
-
-	bool bIsDirectionX = true;
+	bool bEnableBordersCollision = true;
 };
 

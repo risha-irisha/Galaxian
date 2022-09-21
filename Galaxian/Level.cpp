@@ -3,7 +3,7 @@
 #include "Enemy.h"
 #include "WhiteSpaceshipEnemy.h"
 
-#include <fstream> // הכÿ נאבמעû ס פאיכאלט 
+#include <fstream>
 #include <iostream>
 
 void FLevel::Load(const std::string& FileName)
@@ -40,14 +40,6 @@ void FLevel::Load(const std::string& FileName)
         }
     }
 	fin.close();
-
-    //for (size_t i = 0; i < EnemiesDescriptions.size(); i++)
-    //{
-    //    std::cout << "Enemie " << i + 1 << ":\n";
-    //    std::cout << "Location: [" << EnemiesDescriptions[i].Location.x << ", " << EnemiesDescriptions[i].Location.y << "]\n";
-    //    std::cout << "Type: " << int(EnemiesDescriptions[i].EnemyType) << "\n\n";
-    //}
-
 }
 
 const std::vector<FEnemyDescription>& FLevel::GetEnemiesDescriptions() const

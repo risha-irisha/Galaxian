@@ -34,7 +34,6 @@ void FInputControler::HandleInput()
 
 void FInputControler::HandleEvent(const sf::Event& Event)
 {
-
 	if (Event.type == sf::Event::KeyPressed)
 	{
 		if (Event.key.code == sf::Keyboard::Key::Space)

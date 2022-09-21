@@ -2,12 +2,7 @@
 #include "SFML/Graphics.hpp"
 
 #include "StaticObject.h"
-
-enum class ETextureAnimationDirection
-{
-	Vertical,
-	Horizontal
-};
+#include "CommonTypes.h"
 
 struct FAnimationData
 {
@@ -38,13 +33,14 @@ public:
 
 	void SetInput(sf::Vector2f NewInput);
 
-	virtual void OnHit(FStaticObject StaticObject);
+	virtual void OnAnimationEnded();
 
 protected:
 	sf::Vector2f Input;
 	float MoveSpeed;
 
 	float currentFrame = 0.f;
+
 	bool bEnableAnimation = true;
 	
 	//Текущий индекс анимации из массива Animations

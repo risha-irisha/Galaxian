@@ -11,6 +11,7 @@ void FEnemySpawner::SpawnWave(const FLevel& Level)
 {
 	for (size_t i = 0; i < Level.GetEnemiesDescriptions().size(); i++)
 	{
+		// чтобы далее не писать длинный текст
 		const FEnemyDescription& enemyDescription = Level.GetEnemiesDescriptions()[i];
 		
 		std::shared_ptr<FEnemy> enemy;

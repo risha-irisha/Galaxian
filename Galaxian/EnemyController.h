@@ -11,6 +11,6 @@ protected:
 	FWorld& World;
 
 	float LastTimeEnemyShot = 0.f; // времени последнего выстрела
-	float ReloadWeaponEnemyTime = 2.f; // время перезарядки оружия
+	float ReloadWeaponEnemyTime = 6.f; // время перезарядки оружия
 };
 

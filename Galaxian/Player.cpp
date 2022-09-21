@@ -30,11 +30,23 @@ FPlayer::FPlayer(FWorld& World) : FCharacter(World)
 		animData.AnimationDirection = ETextureAnimationDirection::Horizontal;
 	}
 
+	//Hit
+	{
+		FAnimationData& animData = Animations[static_cast<int>(EAnimation::Hit)];
+		animData.numberFrames = 4;
+		animData.SpeedAnimation = 0.005f;
+		animData.SpriteTexturePositionX = 0;
+		animData.SpriteTexturePositionY = 406;
+		animData.SpriteOffset = 1;
+		animData.AnimationDirection = ETextureAnimationDirection::Horizontal;
+		animData.bPlayOnlyOnce = true;
+	}
+
 	//Death
 	{
 		FAnimationData& animData = Animations[static_cast<int>(EAnimation::Death)];
 		animData.numberFrames = 4;
-		animData.SpeedAnimation = 0.005f;
+		animData.SpeedAnimation = 0.001f;
 		animData.SpriteTexturePositionX = 0;
 		animData.SpriteTexturePositionY = 506;
 		animData.SpriteOffset = 1;
@@ -48,40 +60,61 @@ FPlayer::FPlayer(FWorld& World) : FCharacter(World)
 
 	bIsEnabledAutoFire = false;
 
-	ReloadWeaponTime = 0.01f;
+	ReloadWeaponTime = 1.f;
 
 	Team = ETeam::Friend;
 
 	Direction = sf::Vector2f(0.f, -1.f);
 }
 
-void FPlayer::SetHP(float NewHP)
+void FPlayer::OnHit()
 {
-	if (!IsDead())
-	{
-		HP = NewHP;
-
-		std::cout << "New Player HP: " << HP << "\n";
-		if (IsDead())
-		{
-			Kill();
-		}
-	}
+	std::cout << "HP Player: " << HP << "\n";
 }
 
-float FPlayer::GetHP() const
-{
-	return HP;
-}
+//void FPlayer::SetHP(float NewHP)
+//{
+//
+//}
 
-bool FPlayer::IsDead() const
-{
-	return HP <= 0.f;
-}
+//float FPlayer::GetHP() const
+//{
+//	return HP;
+//}
 
-void FPlayer::Kill()
-{
-	//static_cast переводит enum в int
-	//Переключаем анимацию
-	CurrentAnimationIndex = static_cast<int>(EAnimation::Death);
-}
+//bool FPlayer::IsDead() const
+//{
+//	return HP <= 0.f;
+//}
+//
+//void FPlayer::HandleDamage(float Damage)
+//{
+//	if (!IsDead())
+//	{
+//		HP -= Damage;
+//		std::cout << "New Player HP: " << HP << "\n";
+//		CurrentAnimationIndex = static_cast<int>(EAnimation::Hit);
+//
+//		if (IsDead())
+//		{
+//			Kill();
+//		}
+//	}
+//}
+//
+//void FPlayer::Kill()
+//{
+//	CurrentAnimationIndex = static_cast<int>(EAnimation::Death);
+//}
+
+//void FPlayer::OnAnimationEnded()
+//{
+//	if (CurrentAnimationIndex == static_cast<int>(EAnimation::Hit))
+//	{
+//		CurrentAnimationIndex = static_cast<int>(EAnimation::Idle);
+//	}
+//	else if(CurrentAnimationIndex == static_cast<int>(EAnimation::Death))
+//	{
+//		bEnableAnimation = false;
+//	}
+//}

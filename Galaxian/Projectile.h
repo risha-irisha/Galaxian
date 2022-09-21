@@ -21,6 +21,6 @@ public:
 protected:
 	ETeam Team;
 
-	float Damage = 100.f;
+	float Damage = 20.f;
 };
 

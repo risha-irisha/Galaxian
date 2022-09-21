@@ -15,6 +15,20 @@ public:
 
 	ETeam GetTeam() const;
 
+	bool IsDead() const;
+
+	void HandleDamage(float Damage);
+
+	void Kill();
+
+	void PlayAnimation(int AnimationIndex);
+
+	virtual void OnAnimationEnded();
+
+	float GetHP() const;
+
+	virtual void OnHit();
+
 protected:
 	sf::Vector2f Direction;
 
@@ -25,4 +39,6 @@ protected:
 
 	float LastTimeShot = 0.f; // времени последнего выстрела
 	float ReloadWeaponTime = 0.1f; // время перезарядки оружия
+
+	float HP = 100.f;
 };

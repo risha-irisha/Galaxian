@@ -6,5 +6,7 @@ class FEnemy : public FCharacter
 {
 public:
 	FEnemy(FWorld& World);
+
+	virtual void OnHit();
 };
 

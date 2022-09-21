@@ -42,6 +42,7 @@ void FMovableObject::Tick(float DeltaTime)
 
 void FMovableObject::ProcessObjectCollision()
 {
+
 }
 
 FAnimationData* FMovableObject::GetCurrentAnimationData()
@@ -64,17 +65,19 @@ void FMovableObject::Animation(float DeltaTime)
 		return;
 	}
 
+	bool bIsAnimationEnded = false;
+
 	currentFrame += currentAnimationPtr->SpeedAnimation;
 	//ѕроверка что анимаци€ полностью проигралась
 	if (currentFrame > currentAnimationPtr->numberFrames)
-	{
+	{ 
 		currentFrame = 0.f;
 
-		//≈сли анимаци€ должна проигратьс€ всего 1 раз - выключаем анимацию
 		if (currentAnimationPtr->bPlayOnlyOnce)
 		{
 			bEnableAnimation = false;
 		}
+		bIsAnimationEnded = true;
 	}
 
 	//≈сли мы только что остановили анимацию(т.е. она проигралась до конца), то мы больше не обновл€ем текстуру, т.к. currentFrame будет равен 0 и анимаци€ замрет на 1м кадре
@@ -90,6 +93,12 @@ void FMovableObject::Animation(float DeltaTime)
 			break;
 		}
 	}
+
+	if (bIsAnimationEnded)
+	{
+		OnAnimationEnded();
+	}
+	
 	//std::cout << SpriteTexturePositionX * int(currentFrame) << "\n";
 }
 
@@ -98,6 +107,7 @@ void FMovableObject::SetInput(sf::Vector2f NewInput)
 	Input = NewInput;
 }
 
-void FMovableObject::OnHit(FStaticObject StaticObject)
+void FMovableObject::OnAnimationEnded()
 {
+
 }

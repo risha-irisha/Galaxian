@@ -4,23 +4,23 @@
 
 class FPlayer : public FCharacter
 {
-	enum class EAnimation
-	{
-		Idle,
-		Death,
-		Max
-	};
 public:
 	FPlayer(FWorld& World);
 
-	void SetHP(float NewHP);
-	float GetHP() const;
+	//void SetHP(float NewHP);
+	//float GetHP() const;
 
-	bool IsDead() const;
+	/*bool IsDead() const;
 
-	void Kill();
+	void HandleDamage(float Damage);
+
+	void Kill();*/
+
+	//virtual void OnAnimationEnded();
+
+	virtual void OnHit();
 
 protected:
-	float HP = 100.f;
+	//float HP = 100.f;
 };
 

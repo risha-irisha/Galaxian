@@ -14,16 +14,36 @@ FProjectile::FProjectile(FWorld& World) : FMovableObject(World)
 	Rect.width = 18;
 	Rect.height = 46;
 
-	SetSpriteRect(855, 231);
+	//SetSpriteRect(855, 231);
 
-	//numberFrame = 4;
-	//SpeedAnimation = 0.005f;
-	//SpriteTexturePositionX = 855;
-	//SpriteTexturePositionY = 231;
-	//SpriteOffset = 4;
-	//bIsAnimationDirectionX = false;
+	//выделили память для всех анимаций
+	Animations.resize(static_cast<int>(EAnimation::Max));
 
-	MoveSpeed = 10.f;
+	//Idle(переводится как покой(состояние) animation
+	{
+		//Получаем объект из массива под индексом 0. И запоминаем на него ссылку
+		FAnimationData& animData = Animations[static_cast<int>(EAnimation::Idle)];
+		animData.numberFrames = 4;
+		animData.SpeedAnimation = 0.005f;
+		animData.SpriteTexturePositionX = 855;
+		animData.SpriteTexturePositionY = 431;
+		animData.SpriteOffset = 4;
+		animData.AnimationDirection = ETextureAnimationDirection::Vertical;
+	}
+
+	////Death
+	//{
+	//	FAnimationData& animData = Animations[static_cast<int>(EAnimation::Death)];
+	//	animData.numberFrames = 4;
+	//	animData.SpeedAnimation = 0.005f;
+	//	animData.SpriteTexturePositionX = 128;
+	//	animData.SpriteTexturePositionY = 797;
+	//	animData.SpriteOffset = 1;
+	//	animData.AnimationDirection = ETextureAnimationDirection::Horizontal;
+	//	animData.bPlayOnlyOnce = true;
+	//}
+
+	MoveSpeed = 8.f;
 	bEnableBordersCollision = false;	
 }
 
@@ -87,13 +107,18 @@ void FProjectile::ProcessProjectileCollision()
 
 					if (enemy != nullptr)
 					{
-						characterToRemove.push_back(character);
+						enemy->HandleDamage(Damage);
+						if (enemy->IsDead())
+						{
+							characterToRemove.push_back(character);
+						}
 					}
-					else //Если character это Player то пока ничего не делаем
+					else //Если character это Player
 					{
 						if (FPlayer* player = dynamic_cast<FPlayer*>(character))
 						{
-							player->SetHP(player->GetHP() - Damage);
+							//player->SetHP(player->GetHP() - Damage);
+							player->HandleDamage(Damage);
 						}
 					}
 				}

@@ -6,7 +6,7 @@ class FInputControler
 {
 public:
 	FInputControler(FWorld& World);
-	void HandleInput();
+	void HandleInput(); // handle - обработка
 	void HandleEvent(const sf::Event& Event);
 
 protected:
